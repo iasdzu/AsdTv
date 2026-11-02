@@ -8,11 +8,11 @@ permissions:
   contents: write
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Unpack project
         run: |
-          base64 -d > p.tgz <<'B64'
+          cat > p.b64 <<'B64'
           H4sIAAAAAAAAA+xba3PbxpL1Z/2KCbWJSZsACb4kgZYV2YljbezYa8n2Vvl6XUNgQI4FArgzAz2i
           6L9v9wzehGTp1k2qtjasskgM5tHTfbr79AC2Bw/+9M8QPjvTqf6GT/Nb/3amo52RM3YmEwfad3Yc
           5wGZ/vmiPXiQSkUFIQ9EHKvb+n3r/v/Rjz04jlPhMfkn4uBe9h+B/R1nPB79bf+/4lPa/zBJbHnO
@@ -536,7 +536,9 @@ jobs:
           s2vXZrTst7W26fi3bWra1dm8pZX62NjS0nZ106biAB1NH4FgKAYhx7qLsCyf1ShnP7Of2c/sZ/Yz
           +3lvP/8H9JQRYgBoAQA=
           B64
-          tar xzf p.tgz && rm p.tgz
+          python3 -c "import base64;open('p.tgz','wb').write(base64.b64decode(open('p.b64').read()))"
+          tar xzf p.tgz && rm p.tgz p.b64
+          ls
       - name: Bundle players for offline use
         run: |
           curl -fsSL https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js -o web/hls.min.js || true
